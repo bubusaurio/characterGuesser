@@ -21,9 +21,11 @@ bool shiftFlag = true;
 int maxNodeCount = 2;
 int nodeCount = 0;
 int nodeLayer = 0;
-int nodeInitLayer = 0;
+int score = 0;
 std::vector<std::string> questionString{"Male", "Walter White", "Ariel"};
 std::string defaultQuestion = "Is Your Character ";
+
+
 
 
 //Game engine
@@ -33,6 +35,9 @@ class game{
     //Variables
     sf::Event gameEvent;
     sf::VideoMode videoMode;
+    sf::Texture Texture;
+    sf::Sprite Sprite;
+  
 
     //Game logic
     bool mouseHeld;
@@ -46,6 +51,7 @@ class game{
     //Private Function
     void initVariables();
     void initWindow();
+    void initSprites();
 
   public:
     sf::RenderWindow* window;
@@ -62,7 +68,6 @@ class game{
     void rightShift(node *, std::string);
     void leftShift(node *, std::string);
     void questionGenerator(node *&tree);
-    void characterGenerator();
     void binaryTreeGenerator(node *&tree);
     void nodeGenerator(int, bool);
 

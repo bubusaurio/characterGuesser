@@ -4,6 +4,7 @@
 game::game(){
     this -> initVariables();
     this -> initWindow();
+    this -> initSprites();
 }
 
 game::~game(){
@@ -63,22 +64,6 @@ void game::insertNode(node *&tree, std::string id){
     }
 }
 
-void game::showIdRight(node *tree){
-    if(tree == NULL){
-        return;
-    }
-    else{
-        for(int i=nodeInitCounter; i<=nodeCounter; i++){
-            if(nodeInitCounter==nodeCounter){
-                std::cout<<"Is Your character "<< tree->idChar << "?\n";
-                nodeInitCounter--;
-            }
-            nodeInitCounter++;
-            showIdRight(tree->right); //It sends to the function the new root being the right leave 
-        }
-    }
-}
-
 void game::rightShift(node *tree, std::string charName){
     if(shiftFlag){
         shiftFlag = false;
@@ -114,44 +99,77 @@ void game::binaryTreeGenerator(node *&tree){
 }
 
 void game::questionGenerator(node *&tree){
+    node *aux = new node();
     bool answer;
-    std::string charater;
-    if(tree == NULL){
-        std::cout<<"Did i guess your character?\n";
-        std::cin>>answer;
-
-        if(!answer){
-            std::cout<<"Whos your character ?\n";
-            std::cin>>charater;
-            questionString.push_back(charater);
-
-            std::cout<<"Tell me a feature of you character ?\n";
-            std::cin>>charater;
-            questionString.push_back(charater);
-            return;
-        }
-
-        else{
-            std::cout<<"EAAASSSYYYY BOOOOYYYY\n";
-            return;
-        }
-    }
-    else{
+    std::string character;
+    std::string characterFeature;
+    if(tree != NULL){
         std::cout<<"Is Your Character " << tree->idChar << "?\n";
         std::cin>>answer;
 
         if(!answer){
-           questionGenerator(tree->left);
+            score--;
+            if(tree->left == NULL){
+                std::cout<<"Did i guess your character?\n";
+                std::cin>>answer;
+
+                if(!answer){
+                    std::cout<<"Tell me a feature of your character?\n";
+                    std::cin>>characterFeature;
+                    insertNode(tree->left, characterFeature);
+
+                    aux = tree;
+                    tree = tree->left;
+                    tree->left = aux;
+
+                    std::cout<<"Whos your character?\n";
+                    std::cin>>character;
+                    insertNode(tree->right, character);
+                    return;
+                }
+
+                else{
+                    std::cout<<"EAAASSSYYYY BOOOOYYYY\n";
+                    score = 5;
+                    return;
+                }
+            }
+            else{
+                questionGenerator(tree->left);
+            }
         }
 
         else{
-            questionGenerator(tree->right);
+            score++;
+            if(tree->right == NULL){
+                std::cout<<"Did i guess your character?\n";
+                std::cin>>answer;
+
+                if(!answer){
+                    std::cout<<"Tell me a feature of your character?\n";
+                    std::cin>>characterFeature;
+                    insertNode(tree->left, characterFeature);
+
+                    aux = tree;
+                    tree = tree->left;
+                    tree->left = aux;
+
+                    std::cout<<"Whos your character?\n";
+                    std::cin>>character;
+                    insertNode(tree->right, character);
+                    return;
+                }
+
+                else{
+                    std::cout<<"EAAASSSYYYY BOOOOYYYY\n";
+                    return;
+                }
+            }
+            else{
+                questionGenerator(tree->right);
+            } 
         }
     } 
-}
-
-void game::characterGenerator(){
-
 }
 
 //Functions
@@ -176,8 +194,10 @@ void game::render(){
 
     this->window->clear(sf::Color::Black);
 
+    this->window->draw(Sprite);
     //Draw the game
     this->window->display();
+
 }
 
 const bool game::running() const{ //Accesor
@@ -192,10 +212,22 @@ void game::initVariables(){
 
 
 void game::initWindow(){
-    this -> videoMode.height = 600;
-    this -> videoMode.width = 800;
+    this -> videoMode.height = 866;
+    this -> videoMode.width = 1300;
     this -> window = new sf::RenderWindow(this -> videoMode, "Character Guesser", sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize);
-    this -> window -> setFramerateLimit(600);
+    this -> window -> setFramerateLimit(60);
+
+}
+
+void game::initSprites(){
+    if(!Texture.loadFromFile("res/img/background.jpg")){
+        std::cout<<"Load Failed"<<std::endl;
+        system("pause");
+    }
+    Sprite.setTexture(Texture);
+    Sprite.setTextureRect(sf::IntRect(0,0,1300,866));
+
+    
 }
 
 void game::updateMousePositions(){
