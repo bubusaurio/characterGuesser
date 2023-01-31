@@ -1,10 +1,5 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/Audio.hpp>
-#include <SFML/Network.hpp>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -32,33 +27,9 @@ std::string defaultQuestion = "Is Your Character ";
 
 class game{
   private:
-    //Variables
-    sf::Event gameEvent;
-    sf::VideoMode videoMode;
-    sf::Texture Texture;
-    sf::Sprite Sprite;
-  
-
-    //Game logic
-    bool mouseHeld;
-    
-
-    //Mouse Positions
-    sf::Vector2i mousePosWindow;
-    sf::Vector2f mousePosView;
-
-
-    //Private Function
-    void initVariables();
-    void initWindow();
-    void initSprites();
 
   public:
-    sf::RenderWindow* window;
-    //Contructor/Destructor
-    game(); 
-    virtual ~game();
-
+  
     //Node
     struct node;
     node *createNode(std::string);
@@ -70,13 +41,5 @@ class game{
     void questionGenerator(node *&tree);
     void binaryTreeGenerator(node *&tree);
     void nodeGenerator(int, bool);
-
-    //Functions
-    void updateGame();
-    void updateMousePositions();
-    void pollEvent();
-    void update();
-    void render();
-    const bool running() const;
 };
 #include "game.cpp"

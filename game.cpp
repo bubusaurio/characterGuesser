@@ -1,31 +1,5 @@
 #include "game.h"
 
-//Constructor/Deconstructor
-game::game(){
-    this -> initVariables();
-    this -> initWindow();
-    this -> initSprites();
-}
-
-game::~game(){
-    delete this -> window;
-}
-
-void game::pollEvent(){
-    while(this->window->pollEvent(this->gameEvent)){
-        switch(this->gameEvent.type){
-            case sf::Event::Closed:
-                this->window->close();
-                break;
-            
-            case sf::Event::KeyPressed:
-             if(this->gameEvent.key.code == sf::Keyboard::Escape)
-                    this->window->close();
-                    break;
-        }
-    }
-}
-
 //Node Struct
 struct game::node{
     std::string idChar;
@@ -170,72 +144,4 @@ void game::questionGenerator(node *&tree){
             } 
         }
     } 
-}
-
-//Functions
-void game::update(){
-    int actualPosx;
-
-    //Event polling
-    this->pollEvent();
-
-    this->updateMousePositions();
-}
-
-void game::render(){
-
-    /*
-        -Clear old frames
-        -Render Objects
-        -Display frame in window
-
-        Render game objects
-    */
-
-    this->window->clear(sf::Color::Black);
-
-    this->window->draw(Sprite);
-    //Draw the game
-    this->window->display();
-
-}
-
-const bool game::running() const{ //Accesor
-    return this->window->isOpen();
-}
-
-void game::initVariables(){
-    this->window = nullptr;
-
-    this->mouseHeld = false;
-}
-
-
-void game::initWindow(){
-    this -> videoMode.height = 866;
-    this -> videoMode.width = 1300;
-    this -> window = new sf::RenderWindow(this -> videoMode, "Character Guesser", sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize);
-    this -> window -> setFramerateLimit(60);
-
-}
-
-void game::initSprites(){
-    if(!Texture.loadFromFile("res/img/background.jpg")){
-        std::cout<<"Load Failed"<<std::endl;
-        system("pause");
-    }
-    Sprite.setTexture(Texture);
-    Sprite.setTextureRect(sf::IntRect(0,0,1300,866));
-
-    
-}
-
-void game::updateMousePositions(){
-    /*
-        Update Mouse Position
-    */
-
-   this->mousePosWindow = sf::Mouse::getPosition(*this->window);
-   this->mousePosView = this->window->mapPixelToCoords(this->mousePosWindow);
-
 }
